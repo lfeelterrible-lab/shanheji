@@ -35,6 +35,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build": "npm run build:site",
+    "typecheck": "tsc --noEmit",
+    "build:site": "node scripts/build-site.cjs",
     "site:prepare": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/prepare-sites-dist.ps1"
   },
   "private": true

@@ -15,6 +15,8 @@ Web 预览：
 npx expo start --web
 ```
 
+GitHub Pages 构建会读取 `EXPO_BASE_URL`，并把静态产物放到 `dist/client`。仓库工作流会自动发布到 `/shanheji/`。
+
 ## 目录说明
 
 - `app/`：四个主 Tab、学习流程与知识卡详情路由
