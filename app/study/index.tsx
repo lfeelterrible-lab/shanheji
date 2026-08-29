@@ -119,6 +119,7 @@ export default function StudyScreen() {
             <KnowledgeCard
               card={currentCard}
               answerCorrect={session.answer?.correct ?? null}
+              selectedRating={session.answer?.rating ?? null}
               onRate={handleRate}
               onContinue={() => {
                 setSelection(null);
