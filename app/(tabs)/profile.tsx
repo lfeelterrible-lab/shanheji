@@ -1,7 +1,7 @@
 import { BarChart3, Database, Monitor, Moon, ShieldCheck, Sun } from 'lucide-react-native';
+import { useEffect, useRef } from 'react';
 import { ScrollView, StyleSheet, Text, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRef } from 'react';
 
 import { AppMark } from '@/components/AppMark';
 import { useAppTheme, typography } from '@/components/theme';
@@ -24,6 +24,11 @@ export default function ProfileScreen() {
   const accuracy = useStudyStore(selectAccuracy);
   const mastery = overallMastery(progress);
   const studied = Object.values(progress).filter((item) => item.lastReviewedAt).length;
+
+  useEffect(() => {
+    const resetTimer = setTimeout(() => profileScrollRef.current?.scrollTo({ y: 0, animated: false }), 0);
+    return () => clearTimeout(resetTimer);
+  }, [themeMode]);
 
   return (
     <SafeAreaView edges={['top']} style={[styles.safe, { backgroundColor: theme.bg }]}>
@@ -79,10 +84,7 @@ export default function ProfileScreen() {
                   key={value}
                   accessibilityRole="button"
                   accessibilityState={{ selected: active }}
-                  onPress={() => {
-                    setThemeMode(value);
-                    requestAnimationFrame(() => profileScrollRef.current?.scrollTo({ y: 0, animated: false }));
-                  }}
+                  onPress={() => setThemeMode(value)}
                   style={({ pressed }) => [styles.themeOption, { backgroundColor: active ? theme.text : 'transparent', opacity: pressed ? 0.76 : 1 }]}
                 >
                   <Icon size={16} color={active ? theme.bg : theme.muted} />
