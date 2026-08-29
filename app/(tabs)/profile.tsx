@@ -1,6 +1,6 @@
 import { BarChart3, Database, Monitor, Moon, ShieldCheck, Sun } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
-import { ScrollView, StyleSheet, Text, Pressable, View } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppMark } from '@/components/AppMark';
@@ -84,6 +84,7 @@ export default function ProfileScreen() {
                   key={value}
                   accessibilityRole="button"
                   accessibilityState={{ selected: active }}
+                  focusable={Platform.OS !== 'web'}
                   onPress={() => setThemeMode(value)}
                   style={({ pressed }) => [styles.themeOption, { backgroundColor: active ? theme.text : 'transparent', opacity: pressed ? 0.76 : 1 }]}
                 >
