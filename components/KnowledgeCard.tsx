@@ -1,4 +1,4 @@
-import { BookOpenCheck, Lightbulb, Sparkles } from 'lucide-react-native';
+import { BookOpenCheck, Check, Lightbulb, Sparkles } from 'lucide-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -11,6 +11,7 @@ type KnowledgeCardProps = {
   card: GeographyCard;
   answerCorrect?: boolean | null;
   onRate?: (rating: Rating) => void;
+  selectedRating?: Rating | null;
   onContinue: () => void;
   showRating?: boolean;
   continueLabel?: string;
@@ -26,6 +27,7 @@ export function KnowledgeCard({
   card,
   answerCorrect = null,
   onRate,
+  selectedRating = null,
   onContinue,
   showRating = true,
   continueLabel = '下一张',
@@ -89,14 +91,26 @@ export function KnowledgeCard({
               <Pressable
                 key={item.rating}
                 accessibilityRole="button"
+                accessibilityState={{ selected: selectedRating === item.rating }}
                 onPress={() => onRate(item.rating)}
-                style={({ pressed }) => [styles.ratingButton, { borderColor: theme.line, backgroundColor: theme.surfaceElevated, opacity: pressed ? 0.78 : 1 }]}
+                style={({ pressed }) => [
+                  styles.ratingButton,
+                  {
+                    borderColor: selectedRating === item.rating ? theme.accent : theme.line,
+                    backgroundColor: selectedRating === item.rating ? theme.accentSoft : theme.surfaceElevated,
+                    opacity: pressed ? 0.78 : 1,
+                  },
+                ]}
               >
-                <Text style={[styles.ratingLabel, { color: theme.text }]}>{item.label}</Text>
+                <View style={styles.ratingLabelRow}>
+                  {selectedRating === item.rating ? <Check size={14} color={theme.accent} strokeWidth={2.8} /> : null}
+                  <Text style={[styles.ratingLabel, { color: selectedRating === item.rating ? theme.accent : theme.text }]}>{item.label}</Text>
+                </View>
                 <Text style={[styles.ratingHint, { color: theme.muted }]}>{item.hint}</Text>
               </Pressable>
             ))}
           </View>
+          {selectedRating ? <Text style={[styles.ratingStatus, { color: theme.accent }]}>已记录 · 可以继续下一张</Text> : null}
         </View>
       ) : null}
 
@@ -135,8 +149,10 @@ const styles = StyleSheet.create({
   ratingBlock: { gap: 10 },
   ratingRow: { flexDirection: 'row', gap: 8 },
   ratingButton: { flex: 1, minHeight: 58, borderRadius: 14, borderWidth: 1, paddingVertical: 9, alignItems: 'center', justifyContent: 'center', gap: 3 },
+  ratingLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   ratingLabel: { ...typography.bodyStrong, fontSize: 14 },
   ratingHint: { ...typography.caption, fontSize: 11 },
+  ratingStatus: { ...typography.caption, textAlign: 'center', marginTop: 1 },
   continue: { height: 56, borderRadius: 17, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
   continueText: { ...typography.bodyStrong },
 });
