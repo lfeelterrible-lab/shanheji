@@ -26,7 +26,7 @@ export default function ProfileScreen() {
   const studied = Object.values(progress).filter((item) => item.lastReviewedAt).length;
 
   useEffect(() => {
-    const resetTimer = setTimeout(() => profileScrollRef.current?.scrollTo({ y: 0, animated: false }), 0);
+    const resetTimer = setTimeout(() => profileScrollRef.current?.scrollTo({ y: 0, animated: false }), 120);
     return () => clearTimeout(resetTimer);
   }, [themeMode]);
 
