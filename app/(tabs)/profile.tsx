@@ -1,6 +1,7 @@
 import { BarChart3, Database, Monitor, Moon, ShieldCheck, Sun } from 'lucide-react-native';
 import { ScrollView, StyleSheet, Text, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRef } from 'react';
 
 import { AppMark } from '@/components/AppMark';
 import { useAppTheme, typography } from '@/components/theme';
@@ -17,6 +18,7 @@ export default function ProfileScreen() {
   const theme = useAppTheme();
   const themeMode = useStudyStore((state) => state.themeMode);
   const setThemeMode = useStudyStore((state) => state.setThemeMode);
+  const profileScrollRef = useRef<ScrollView>(null);
   const progress = useStudyStore((state) => state.progress);
   const streak = useStudyStore((state) => state.streak);
   const accuracy = useStudyStore(selectAccuracy);
@@ -25,7 +27,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView edges={['top']} style={[styles.safe, { backgroundColor: theme.bg }]}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView ref={profileScrollRef} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <AppMark compact />
           <Text style={[styles.headerTitle, { color: theme.muted }]}>我的</Text>
@@ -77,7 +79,10 @@ export default function ProfileScreen() {
                   key={value}
                   accessibilityRole="button"
                   accessibilityState={{ selected: active }}
-                  onPress={() => setThemeMode(value)}
+                  onPress={() => {
+                    setThemeMode(value);
+                    requestAnimationFrame(() => profileScrollRef.current?.scrollTo({ y: 0, animated: false }));
+                  }}
                   style={({ pressed }) => [styles.themeOption, { backgroundColor: active ? theme.text : 'transparent', opacity: pressed ? 0.76 : 1 }]}
                 >
                   <Icon size={16} color={active ? theme.bg : theme.muted} />
