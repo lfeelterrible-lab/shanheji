@@ -1,6 +1,6 @@
 import { ArrowUpRight, Clock3, Flame } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppMark } from '@/components/AppMark';
@@ -12,6 +12,7 @@ import { selectDueCount, selectTodayNewCount, useStudyStore } from '@/store/useS
 export default function TodayScreen() {
   const router = useRouter();
   const theme = useAppTheme();
+  const { width } = useWindowDimensions();
   const progress = useStudyStore((state) => state.progress);
   const streak = useStudyStore((state) => state.streak);
   const dueCount = useStudyStore(selectDueCount);
@@ -29,12 +30,12 @@ export default function TodayScreen() {
 
         <View style={styles.intro}>
           <Text style={[styles.eyebrow, { color: theme.accent }]}>今天</Text>
-          <Text style={[styles.title, { color: theme.text }]}>把中国地理，{`\n`}一张一张记进脑子里。</Text>
+          <Text style={[styles.title, width <= 340 && styles.narrowTitle, { color: theme.text }]}>把中国地理，{`\n`}一张一张记进脑子里。</Text>
         </View>
 
         <View style={[styles.metrics, { borderTopColor: theme.line, borderBottomColor: theme.line }]}>
           <View style={styles.metric}>
-            <Text style={[styles.metricNumber, { color: theme.text }]}>{newCount || 10}</Text>
+            <Text style={[styles.metricNumber, { color: theme.text }]}>{newCount}</Text>
             <Text style={[styles.metricLabel, { color: theme.muted }]}>新知识</Text>
           </View>
           <View style={[styles.metricDivider, { backgroundColor: theme.line }]} />
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
   intro: { marginTop: 46, marginBottom: 32 },
   eyebrow: { ...typography.label, marginBottom: 12 },
   title: { ...typography.display, fontSize: 31, lineHeight: 40 },
+  narrowTitle: { fontSize: 27, lineHeight: 35 },
   metrics: { minHeight: 94, borderTopWidth: 1, borderBottomWidth: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' },
   metric: { flex: 1, alignItems: 'center', gap: 4 },
   metricNumber: { fontSize: 27, lineHeight: 32, fontWeight: '700', letterSpacing: -0.5 },
